@@ -13,7 +13,6 @@
 </head>
 <body>
 
-  <!-- Video de fondo pixelado -->
   <div class="video-bg">
     <video id="bgVideo" autoplay muted loop playsinline crossorigin="anonymous">
       <source src="https://pixabay.com/es/videos/download/video-61767_medium.mp4" type="video/mp4">
@@ -21,20 +20,80 @@
     <canvas id="pixelCanvas"></canvas>
   </div>
 
-  <!-- Scanlines retro -->
   <div class="scanlines"></div>
+
+  <!-- ===== STICKY MENU ===== -->
+  <div class="sticky-menu" id="stickyMenu">
+    <div class="sticky-content">
+      <div class="search-wrapper">
+        <span class="sticky-prompt">&gt;</span>
+        <input type="text" id="stickySearchInput" placeholder="BUSCAR CARTA...">
+      </div>
+      <div class="tiradas-wrapper">
+        <button class="tiradas-btn" id="stickyTiradasBtn">▾ TIRADAS</button>
+        <div class="tiradas-dropdown" id="stickyTiradasDropdown"></div>
+      </div>
+    </div>
+  </div>
 
   <header>
     <h1>★ TAROT POKER ★</h1>
     <p>&gt; SIGNIFICADO DE LAS CARTAS &lt;</p>
   </header>
 
+  <!-- Buscador + menú tiradas (header) -->
   <div class="search-box">
-    <span class="prompt">&gt;</span>
-    <input type="text" id="searchInput" placeholder="BUSCAR CARTA...">
+    <div class="search-wrapper">
+      <span class="prompt">&gt;</span>
+      <input type="text" id="searchInput" placeholder="BUSCAR CARTA...">
+    </div>
+    <div class="tiradas-wrapper">
+      <button class="tiradas-btn" id="tiradasBtn">▾ TIRADAS</button>
+      <div class="tiradas-dropdown" id="tiradasDropdown"></div>
+    </div>
   </div>
 
-  <div class="cards-grid" id="cardsGrid"></div>
+  <div class="decks-container" id="decksContainer"></div>
+
+  <!-- ===== OVERLAY CARTA ===== -->
+  <div class="card-overlay" id="cardOverlay">
+    <div class="overlay-backdrop" id="overlayBackdrop"></div>
+    <div class="big-card" id="bigCard">
+      <div class="big-card-inner">
+        <div class="big-face big-front" id="bigFront"></div>
+        <div class="big-face big-back" id="bigBackFace">
+          <div class="back-content" id="bigBack"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== OVERLAY TIRADA ===== -->
+  <div class="tirada-overlay" id="tiradaOverlay">
+    <div class="overlay-backdrop" id="tiradaBackdrop"></div>
+    <div class="tirada-panel" id="tiradaPanel">
+      <button class="close-btn-tirada" id="closeTiradaBtn">X</button>
+      <h2 id="tiradaTitle"></h2>
+      <div class="tirada-instructions" id="tiradaInstructions"></div>
+      <div class="tirada-board" id="tiradaBoard"></div>
+      <div class="tirada-summary" id="tiradaSummary"></div>
+      <div class="tirada-actions">
+        <button class="tirada-action-btn reset" id="resetTiradaBtn">↺ REINICIAR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== OVERLAY SELECTOR DE CARTA ===== -->
+  <div class="picker-overlay" id="pickerOverlay">
+    <div class="overlay-backdrop" id="pickerBackdrop"></div>
+    <div class="picker-panel">
+      <button class="close-btn-tirada" id="closePickerBtn">X</button>
+      <h2>¿QUÉ CARTA TE SALIÓ?</h2>
+      <p class="picker-subtitle" id="pickerSubtitle"></p>
+      <input type="text" id="pickerSearch" placeholder="BUSCAR CARTA...">
+      <div class="picker-grid" id="pickerGrid"></div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
