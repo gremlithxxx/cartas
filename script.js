@@ -1,5 +1,5 @@
 // ================================================================
-//  VIDEO PIXELADO (8-BIT)
+//  VIDEO PIXELADO (8-BIT) CON CANVAS
 // ================================================================
 (function setupPixelVideo() {
   const video  = document.getElementById('bgVideo');
@@ -79,8 +79,8 @@ const significados = {
   Q:    'LA REINA SIMBOLIZA INTUICION, CUIDADO Y SABIDURIA EMOCIONAL. LIDERAR CON EL CORAZON.',
   R:    'EL REY REPRESENTA AUTORIDAD, DOMINIO Y MADUREZ. CONTROL, RESPONSABILIDAD Y LIDERAZGO.',
   A:    'EL AS (AL FINAL DEL MAZO) SIMBOLIZA EL CIERRE DEL CICLO Y LA PLENITUD TOTAL. TODO VUELVE A EMPEZAR.',
-  'joker-red':   'EL JOKER ROJO REPRESENTA EL CAOS CREATIVO, LA CHISPA IMPREVISTA Y LAS OPORTUNIDADES QUE LLEGAN SIN AVISAR.',
-  'joker-black': 'EL JOKER NEGRO REPRESENTA EL MISTERIO, LO OCULTO Y LO INESPERADO. SIMBOLIZA EL LIBRE ALBEDRIO.'
+  'joker-red':   'EL JOKER ROJO REPRESENTA EL CAOS CREATIVO, LA CHISPA IMPREVISTA Y LAS OPORTUNIDADES QUE LLEGAN SIN AVISAR. ES EL COMODIN DEL DESTINO.',
+  'joker-black': 'EL JOKER NEGRO REPRESENTA EL MISTERIO, LO OCULTO Y LO INESPERADO. SIMBOLIZA EL LIBRE ALBEDRIO Y LAS CARTAS QUE LA VIDA TE DA SIN PEDIRLAS.'
 };
 
 const significadosPalos = {
@@ -90,9 +90,7 @@ const significadosPalos = {
   picas:     'PALO DE PICAS - AIRE: MENTE Y VERDAD.'
 };
 
-// Buscar datos completos por nombre (para el picker)
 function getCardByName(fullName) {
-  // fullName tipo "As de Corazones" o "Joker Rojo"
   for (const s of suits) {
     for (const r of ranks) {
       if (`${r.nombre} de ${s.nombre}` === fullName) {
@@ -109,28 +107,42 @@ function getCardByName(fullName) {
 }
 
 
-// ================================================================
-//  TIRADAS DE TAROT
-// ================================================================
 const tiradas = [
   {
-    id: 'si-no',
-    nombre: 'SI O NO',
+    id: 'una-carta',
+    nombre: 'TIRADA DE 1 CARTA',
     nivel: 'NIVEL 1 - FACIL',
     como: [
-      'CONCENTRATE EN TU PREGUNTA DE SI O NO.',
-      'BARAJAR Y CORTA EL MAZO CON LA MANO IZQUIERDA.',
-      'SACA UNA SOLA CARTA Y COLOCALA BOCA ARRIBA.',
-      'INTERPRETA: ROJO = SI, NEGRO = NO. LOS ASES Y FIGURAS REFUERZAN LA RESPUESTA.'
+      'SIRVE PARA RESPUESTAS RAPIDAS, CONSEJO DEL DIA O PREGUNTAS DE SI O NO.',
+      'BARAJAR BIEN EL MAZO DE POKER Y HAZ UNA PREGUNTA.',
+      'EXTRAE UNA SOLA CARTA Y COLOCALA BOCA ARRIBA.',
+      'INTERPRETA: ROJO (CORAZONES/DIAMANTES) = SI O ENERGIA POSITIVA. NEGRO (PICAS/TREBOLES) = NO U OBSTACULOS.'
     ],
     posiciones: [
-      { num: 1, label: 'RESPUESTA', significado: 'LA CARTA RESPONDE DIRECTAMENTE TU PREGUNTA.' }
+      { num: 1, label: 'RESPUESTA / CONSEJO', significado: 'LA CARTA RESPONDE DIRECTAMENTE TU PREGUNTA O DA EL MENSAJE DEL DIA.' }
     ],
     layout: { cols: 1, rows: 1 }
   },
   {
+    id: 'si-no-tres',
+    nombre: 'SI / NO (3 CARTAS)',
+    nivel: 'NIVEL 1 - FACIL',
+    como: [
+      'PIENSA EN TU PREGUNTA CERRADA DE SI O NO.',
+      'BARAJAR Y SACA TRES CARTAS UNA POR UNA.',
+      'COLOCALAS DE IZQUIERDA A DERECHA.',
+      'LA PRIMERA ES LA RESPUESTA DIRECTA, LA SEGUNDA MATIZA Y LA TERCERA DA EL CONTEXTO.'
+    ],
+    posiciones: [
+      { num: 1, label: 'RESPUESTA',  significado: 'SI O NO CLARO: ROJO = SI, NEGRO = NO.' },
+      { num: 2, label: 'MATIZ',      significado: 'EL "PERO" O CONDICION DE ESA RESPUESTA.' },
+      { num: 3, label: 'CONTEXTO',   significado: 'LA ENERGIA QUE RODEA LA SITUACION.' }
+    ],
+    layout: { cols: 3, rows: 1 }
+  },
+  {
     id: 'tres-tiempos',
-    nombre: 'TRES TIEMPOS',
+    nombre: 'PASADO, PRESENTE Y FUTURO',
     nivel: 'NIVEL 1 - FACIL',
     como: [
       'PIENSA EN TU SITUACION ACTUAL.',
@@ -151,18 +163,57 @@ const tiradas = [
     nivel: 'NIVEL 2 - INTERMEDIA',
     como: [
       'BARAJAR Y SACA CUATRO CARTAS.',
-      'COLOCA LA PRIMERA AL CENTRO.',
-      'LA SEGUNDA A LA IZQUIERDA (LO QUE CRUZA).',
-      'LA TERCERA ARRIBA (LO QUE CORONA).',
-      'LA CUARTA ABAJO (LA BASE).'
+      'COLOCA LA PRIMERA AL CENTRO (TU ACTITUD).',
+      'LA SEGUNDA A LA IZQUIERDA (A FAVOR).',
+      'LA TERCERA A LA DERECHA (EN CONTRA).',
+      'LA CUARTA ABAJO (CONCLUSION).'
     ],
     posiciones: [
-      { num: 1, label: 'SITUACION', significado: 'EL CORAZON DEL ASUNTO.' },
-      { num: 2, label: 'OBSTACULO', significado: 'LO QUE SE CRUZA EN TU CAMINO.' },
-      { num: 3, label: 'META',      significado: 'LO QUE CORONA, TU OBJETIVO IDEAL.' },
-      { num: 4, label: 'BASE',      significado: 'EL FUNDAMENTO, LO QUE SOSTIENE TODO.' }
+      { num: 1, label: 'ACTITUD',    significado: 'TU POSTURA ANTE EL TEMA.' },
+      { num: 2, label: 'A FAVOR',    significado: 'LOS FACTORES QUE TE AYUDAN.' },
+      { num: 3, label: 'EN CONTRA',  significado: 'LOS OBSTACULOS O FRENOS.' },
+      { num: 4, label: 'CONCLUSION', significado: 'EL RESULTADO PROBABLE.' }
     ],
     layout: { cols: 3, rows: 2, custom: 'cross-simple' }
+  },
+  {
+    id: 'abanico',
+    nombre: 'TIRADA DEL ABANICO',
+    nivel: 'NIVEL 2 - INTERMEDIA',
+    como: [
+      'SIRVE PARA ANALIZAR LAS OPCIONES O EL FLUJO DE ENERGIA ALREDEDOR DE UNA DECISION.',
+      'SACA CINCO CARTAS Y DISPONLAS EN FORMA DE ABANICO, DE IZQUIERDA A DERECHA.',
+      'MUESTRA PASO A PASO COMO EVOLUCIONA UN ASUNTO DE UN EXTREMO A OTRO.',
+      'TE PERMITE VER QUE IMPULSA O FRENA EL PROCESO.'
+    ],
+    posiciones: [
+      { num: 1, label: 'INICIO',    significado: 'EL PUNTO DE PARTIDA DEL ASUNTO.' },
+      { num: 2, label: 'IMPULSO',   significado: 'LO QUE EMPUJA EL PROCESO HACIA ADELANTE.' },
+      { num: 3, label: 'CENTRO',    significado: 'EL NUCLEO DE LA DECISION O EL MOMENTO CLAVE.' },
+      { num: 4, label: 'FRENO',     significado: 'LO QUE DETIENE O COMPLICA EL AVANCE.' },
+      { num: 5, label: 'RESULTADO', significado: 'EL DESENLACE SI SIGUES ESTE FLUJO.' }
+    ],
+    layout: { cols: 5, rows: 1, custom: 'abanico' }
+  },
+  {
+    id: 'decisiones',
+    nombre: 'TIRADA DE DECISIONES',
+    nivel: 'NIVEL 2 - INTERMEDIA',
+    como: [
+      'PIENSA EN LAS DOS OPCIONES QUE ESTAS CONSIDERANDO.',
+      'SACA SEIS CARTAS Y COLOCALAS EN DOS COLUMNAS.',
+      'LA COLUMNA IZQUIERDA ES LA OPCION A Y LA DERECHA LA OPCION B.',
+      'COMPARA LOS PROS, CONTRAS Y RESULTADOS DE CADA UNA.'
+    ],
+    posiciones: [
+      { num: 1, label: 'OPCION A - PRO',       significado: 'VENTAJA DE LA OPCION A.' },
+      { num: 2, label: 'OPCION A - CONTRA',    significado: 'DESVENTAJA DE LA OPCION A.' },
+      { num: 3, label: 'OPCION A - RESULTADO', significado: 'DESENLACE SI ELIGES A.' },
+      { num: 4, label: 'OPCION B - PRO',       significado: 'VENTAJA DE LA OPCION B.' },
+      { num: 5, label: 'OPCION B - CONTRA',    significado: 'DESVENTAJA DE LA OPCION B.' },
+      { num: 6, label: 'OPCION B - RESULTADO', significado: 'DESENLACE SI ELIGES B.' }
+    ],
+    layout: { cols: 2, rows: 3, custom: 'decisiones' }
   },
   {
     id: 'herradura',
@@ -186,6 +237,29 @@ const tiradas = [
     layout: { cols: 7, rows: 1 }
   },
   {
+    id: 'cuadrado-9',
+    nombre: 'CUADRADO DE 9 CARTAS',
+    nivel: 'NIVEL 3 - AVANZADA',
+    como: [
+      'SIRVE PARA EXPLORAR UN TEMA COMPLEJO CON MAYOR PROFUNDIDAD (TRABAJO, AMOR O DESARROLLO PERSONAL).',
+      'SACA NUEVE CARTAS Y COLOCALAS FORMANDO UNA CUADRICULA DE 3x3.',
+      'LA CARTA DEL CENTRO REPRESENTA EL NUCLEO O AL CONSULTANTE.',
+      'LAS CARTAS QUE LA RODEAN MUESTRAN LAS INFLUENCIAS EXTERNAS, LOS APOYOS Y LOS BLOQUEOS.'
+    ],
+    posiciones: [
+      { num: 1, label: 'PASADO LEJANO',  significado: 'LO QUE YA QUEDO ATRAS.' },
+      { num: 2, label: 'INFLUENCIA',     significado: 'LO QUE INFLUYE DESDE ARRIBA.' },
+      { num: 3, label: 'FUTURO CERCANO', significado: 'LO QUE VIENE PRONTO.' },
+      { num: 4, label: 'APOYO',          significado: 'LO QUE TE SOSTIENE POR LA IZQUIERDA.' },
+      { num: 5, label: 'NUCLEO',         significado: 'EL CENTRO DEL TEMA O EL CONSULTANTE.' },
+      { num: 6, label: 'BLOQUEO',        significado: 'LO QUE FRENA POR LA DERECHA.' },
+      { num: 7, label: 'RAIZ',           significado: 'LA BASE DEL ASUNTO.' },
+      { num: 8, label: 'CONSEJO',        significado: 'LO QUE DEBES HACER.' },
+      { num: 9, label: 'RESULTADO',      significado: 'EL DESENLACE FINAL.' }
+    ],
+    layout: { cols: 3, rows: 3, custom: 'cuadrado-9' }
+  },
+  {
     id: 'cruz-celta',
     nombre: 'CRUZ CELTA',
     nivel: 'NIVEL 3 - AVANZADA',
@@ -196,16 +270,16 @@ const tiradas = [
       'CADA POSICION RESPONDE A UNA PREGUNTA ESPECIFICA.'
     ],
     posiciones: [
-      { num: 1, label: 'PRESENTE',   significado: 'EL ASUNTO ACTUAL, EL CORAZON DEL TEMA.' },
-      { num: 2, label: 'OBSTACULO',  significado: 'LO QUE SE CRUZA O AYUDA (DEPENDE DE LA CARTA).' },
-      { num: 3, label: 'BASE',       significado: 'LA RAIZ DEL ASUNTO, LO SUBCONSCIENTE.' },
-      { num: 4, label: 'PASADO',     significado: 'LO RECIENTE QUE INFLUYE.' },
-      { num: 5, label: 'META',       significado: 'LO QUE CORONA, TU OBJETIVO CONSCIENTE.' },
-      { num: 6, label: 'FUTURO',     significado: 'LO QUE VIENE EN EL CORTO PLAZO.' },
-      { num: 7, label: 'YO',         significado: 'TU ACTITUD ANTE EL TEMA.' },
-      { num: 8, label: 'ENTORNO',    significado: 'LAS INFLUENCIAS EXTERNAS.' },
-      { num: 9, label: 'ESPERANZAS', significado: 'TUS MIEDOS Y ESPERANZAS.' },
-      { num: 10, label: 'RESULTADO', significado: 'EL DESENLACE FINAL.' }
+      { num: 1,  label: 'PRESENTE',   significado: 'EL ASUNTO ACTUAL, EL CORAZON DEL TEMA.' },
+      { num: 2,  label: 'OBSTACULO',  significado: 'LO QUE SE CRUZA O AYUDA (DEPENDE DE LA CARTA).' },
+      { num: 3,  label: 'BASE',       significado: 'LA RAIZ DEL ASUNTO, LO SUBCONSCIENTE.' },
+      { num: 4,  label: 'PASADO',     significado: 'LO RECIENTE QUE INFLUYE.' },
+      { num: 5,  label: 'META',       significado: 'LO QUE CORONA, TU OBJETIVO CONSCIENTE.' },
+      { num: 6,  label: 'FUTURO',     significado: 'LO QUE VIENE EN EL CORTO PLAZO.' },
+      { num: 7,  label: 'YO',         significado: 'TU ACTITUD ANTE EL TEMA.' },
+      { num: 8,  label: 'ENTORNO',    significado: 'LAS INFLUENCIAS EXTERNAS.' },
+      { num: 9,  label: 'ESPERANZAS', significado: 'TUS MIEDOS Y ESPERANZAS.' },
+      { num: 10, label: 'RESULTADO',  significado: 'EL DESENLACE FINAL.' }
     ],
     layout: { cols: 6, rows: 4, custom: 'celta' }
   },
@@ -219,18 +293,56 @@ const tiradas = [
       'LA COLUMNA IZQUIERDA ES EL PILAR DE LA SEVERIDAD, LA DERECHA EL DE LA MISERICORDIA Y LA CENTRAL EL DEL EQUILIBRIO.'
     ],
     posiciones: [
-      { num: 1, label: 'KETHER',   significado: 'LA CORONA, TU POTENCIAL MAS ALTO.' },
-      { num: 2, label: 'CHOKMAH',  significado: 'LA SABIDURIA, LA FUERZA CREADORA.' },
-      { num: 3, label: 'BINAH',    significado: 'EL ENTENDIMIENTO, LA ESTRUCTURA.' },
-      { num: 4, label: 'CHESED',   significado: 'LA MISERICORDIA, LA EXPANSION.' },
-      { num: 5, label: 'GEBURAH',  significado: 'LA SEVERIDAD, LA DISCIPLINA.' },
-      { num: 6, label: 'TIPHERET', significado: 'LA BELLEZA, EL CORAZON.' },
-      { num: 7, label: 'NETZACH',  significado: 'LA VICTORIA, LA EMOCION.' },
-      { num: 8, label: 'HOD',      significado: 'LA GLORIA, LA MENTE.' },
-      { num: 9, label: 'YESOD',    significado: 'EL FUNDAMENTO, LO SUBCONSCIENTE.' },
-      { num: 10, label: 'MALKUTH', significado: 'EL REINO, LA MANIFESTACION.' }
+      { num: 1,  label: 'KETHER',   significado: 'LA CORONA, TU POTENCIAL MAS ALTO.' },
+      { num: 2,  label: 'CHOKMAH',  significado: 'LA SABIDURIA, LA FUERZA CREADORA.' },
+      { num: 3,  label: 'BINAH',    significado: 'EL ENTENDIMIENTO, LA ESTRUCTURA.' },
+      { num: 4,  label: 'CHESED',   significado: 'LA MISERICORDIA, LA EXPANSION.' },
+      { num: 5,  label: 'GEBURAH',  significado: 'LA SEVERIDAD, LA DISCIPLINA.' },
+      { num: 6,  label: 'TIPHERET', significado: 'LA BELLEZA, EL CORAZON.' },
+      { num: 7,  label: 'NETZACH',  significado: 'LA VICTORIA, LA EMOCION.' },
+      { num: 8,  label: 'HOD',      significado: 'LA GLORIA, LA MENTE.' },
+      { num: 9,  label: 'YESOD',    significado: 'EL FUNDAMENTO, LO SUBCONSCIENTE.' },
+      { num: 10, label: 'MALKUTH',  significado: 'EL REINO, LA MANIFESTACION.' }
     ],
     layout: { cols: 5, rows: 5, custom: 'arbol' }
+  },
+  {
+    id: 'romani',
+    nombre: 'TIRADA ROMANI',
+    nivel: 'NIVEL 4 - MUY AVANZADA',
+    como: [
+      'UNA LECTURA AMPLIA Y DETALLADA SOBRE LA VIDA GENERAL DEL CONSULTANTE (AMOR, DINERO, ENTORNO Y DESTINO).',
+      'TRADICIONALMENTE SE DISTRIBUYEN VARIAS FILAS DE CARTAS (A MENUDO 7 CARTAS POR FILA HASTA COMPLETAR 21).',
+      'SE LEEN HISTORIAS CRUZADAS ENTRE LOS PALOS.',
+      'CORAZONES: AMOR, EMOCIONES Y RELACIONES.',
+      'DIAMANTES: DINERO, NEGOCIOS Y ASUNTOS MATERIALES.',
+      'TREBOLES: TRABAJO, CREATIVIDAD, ENERGIA Y ACCION.',
+      'PICAS: DESAFIOS, SALUD, MENTE Y CONFLICTOS.'
+    ],
+    posiciones: [
+      { num: 1,  label: 'AMOR',        significado: 'CORAZONES: AMOR, EMOCIONES Y RELACIONES.' },
+      { num: 2,  label: 'DINERO',      significado: 'DIAMANTES: DINERO, NEGOCIOS Y ASUNTOS MATERIALES.' },
+      { num: 3,  label: 'TRABAJO',     significado: 'TREBOLES: TRABAJO, CREATIVIDAD, ENERGIA Y ACCION.' },
+      { num: 4,  label: 'DESAFIOS',    significado: 'PICAS: DESAFIOS, SALUD, MENTE Y CONFLICTOS.' },
+      { num: 5,  label: 'PASADO',      significado: 'LO QUE YA QUEDO ATRAS EN TU VIDA.' },
+      { num: 6,  label: 'PRESENTE',    significado: 'EL MOMENTO ACTUAL QUE VIVES.' },
+      { num: 7,  label: 'FUTURO',      significado: 'HACIA DONDE SE DIRIGE TU DESTINO.' },
+      { num: 8,  label: 'ENTORNO',     significado: 'LAS PERSONAS Y CIRCUNSTANCIAS QUE TE RODEAN.' },
+      { num: 9,  label: 'DESTINO',     significado: 'EL PROPOSITO O CAMINO QUE TE ESPERA.' },
+      { num: 10, label: 'CORAZON',     significado: 'LO QUE TU CORAZON DESEA EN SILENCIO.' },
+      { num: 11, label: 'MENTE',       significado: 'LO QUE TU MENTE RACIONALIZA.' },
+      { num: 12, label: 'CUERPO',      significado: 'TU ESTADO FISICO Y VITALIDAD.' },
+      { num: 13, label: 'FAMILIA',     significado: 'TUS VINCULOS FAMILIARES.' },
+      { num: 14, label: 'AMIGOS',      significado: 'TUS ALIANZAS Y AMISTADES.' },
+      { num: 15, label: 'TRABAJO HOY', significado: 'TU SITUACION LABORAL ACTUAL.' },
+      { num: 16, label: 'DINERO HOY',  significado: 'TU SITUACION ECONOMICA ACTUAL.' },
+      { num: 17, label: 'SALUD',       significado: 'TU BIENESTAR FISICO Y MENTAL.' },
+      { num: 18, label: 'ESPIRITU',    significado: 'TU CONEXION ESPIRITUAL.' },
+      { num: 19, label: 'LECCION',     significado: 'LA LECCION QUE DEBES APRENDER.' },
+      { num: 20, label: 'REGALO',      significado: 'EL DON QUE LA VIDA TE OFRECE.' },
+      { num: 21, label: 'SINTESIS',    significado: 'EL MENSAJE FINAL DE TODA LA TIRADA.' }
+    ],
+    layout: { cols: 7, rows: 3, custom: 'romani' }
   }
 ];
 
@@ -310,7 +422,6 @@ function renderDecks() {
     decksContainer.appendChild(deck);
   });
 
-  // Jokers
   const jokersCategory = document.createElement('div');
   jokersCategory.className = 'jokers-category';
 
@@ -485,7 +596,7 @@ document.addEventListener('click', () => {
 //  LÓGICA DE TIRADA
 // ================================================================
 let tiradaActual = null;
-let cartasElegidas = [];   // índice = posición, valor = fullName o null
+let cartasElegidas = [];
 let slotSeleccionado = null;
 
 function openTirada(t) {
@@ -506,10 +617,9 @@ function openTirada(t) {
 
 function renderBoard(t) {
   tiradaBoard.innerHTML = '';
+  tiradaBoard.dataset.tirada = t.id;
 
-  // Layout básico en grid
   if (t.layout.custom === 'cross-simple') {
-    // grid 3x2 con posiciones específicas
     tiradaBoard.style.gridTemplateColumns = 'repeat(3, minmax(80px, 120px))';
     tiradaBoard.style.gridTemplateRows = 'auto auto';
     tiradaBoard.style.gridTemplateAreas = `
@@ -525,7 +635,6 @@ function renderBoard(t) {
   } else if (t.layout.custom === 'celta') {
     tiradaBoard.style.gridTemplateColumns = 'repeat(6, minmax(70px, 100px))';
     tiradaBoard.style.gridTemplateRows = 'repeat(4, auto)';
-    // posiciones específicas por slot
     const celtaPositions = {
       0: { col: 2, row: 2 },
       1: { col: 2, row: 1 },
@@ -548,19 +657,6 @@ function renderBoard(t) {
   } else if (t.layout.custom === 'arbol') {
     tiradaBoard.style.gridTemplateColumns = 'repeat(5, minmax(60px, 90px))';
     tiradaBoard.style.gridTemplateRows = 'repeat(5, auto)';
-    const arbolPositions = {
-      0: { col: 3, row: 1 },
-      1: { col: 4, row: 2 },
-      2: { col: 2, row: 2 },
-      3: { col: 4, row: 3 },
-      4: { col: 2, row: 3 },
-      5: { col: 3, row: 4 },
-      6: { col: 4, row: 5 },
-      7: { col: 2, row: 5 },
-      8: { col: 3, row: 5 },
-      9: { col: 3, row: 5 }
-    };
-    // Reordenamos manualmente según el layout del árbol
     const ordenArbol = [
       { col: 3, row: 1 },
       { col: 4, row: 2 },
@@ -573,7 +669,6 @@ function renderBoard(t) {
       { col: 3, row: 5 },
       { col: 3, row: 5 }
     ];
-    // Solo mostramos las 9 primeras posiciones en sus lugares
     t.posiciones.forEach((pos, i) => {
       const slot = createSlot(pos, i, t);
       const p = ordenArbol[i] || { col: 3, row: 5 };
@@ -673,7 +768,6 @@ function renderSummary() {
   });
 }
 
-// Cerrar tirada
 closeTiradaBtn.addEventListener('click', () => {
   tiradaOverlay.classList.remove('active');
 });
@@ -681,7 +775,6 @@ tiradaBackdrop.addEventListener('click', () => {
   tiradaOverlay.classList.remove('active');
 });
 
-// Reset
 resetTiradaBtn.addEventListener('click', () => {
   if (!tiradaActual) return;
   cartasElegidas = new Array(tiradaActual.posiciones.length).fill(null);
@@ -707,7 +800,6 @@ function openPicker(index) {
 function buildPickerGrid() {
   pickerGrid.innerHTML = '';
 
-  // Cartas normales
   suits.forEach(suit => {
     ranks.forEach(rank => {
       const card = document.createElement('div');
@@ -723,7 +815,6 @@ function buildPickerGrid() {
     });
   });
 
-  // Jokers
   jokers.forEach(j => {
     const card = document.createElement('div');
     card.className = 'picker-card joker';
