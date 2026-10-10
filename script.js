@@ -6,7 +6,6 @@
   const canvas = document.getElementById('pixelCanvas');
   const ctx    = canvas.getContext('2d');
 
-  // Resolución "pixelada": mientras más bajo, más 8-bit se ve
   const PIXEL_WIDTH = 160;
 
   function resize() {
@@ -16,9 +15,7 @@
   resize();
   window.addEventListener('resize', resize);
 
-  video.addEventListener('loadeddata', () => {
-    video.play().catch(() => {});
-  });
+  video.addEventListener('loadeddata', () => video.play().catch(() => {}));
 
   function draw() {
     if (video.readyState >= 2) {
@@ -29,7 +26,6 @@
   }
   draw();
 
-  // Fallback si el video no carga
   video.addEventListener('error', () => {
     ctx.fillStyle = '#0a0a1a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -38,7 +34,7 @@
 
 
 // ================================================================
-//  DATOS DE LAS CARTAS
+//  DATOS
 // ================================================================
 const suits = [
   { key: 'corazones', symbol: '♥', color: 'suit-red',   nombre: 'Corazones' },
@@ -64,26 +60,26 @@ const ranks = [
 ];
 
 const significados = {
-  A:   'EL AS REPRESENTA EL INICIO, LA CHISPA DIVINA Y EL POTENCIAL PURO. ANUNCIA NUEVOS COMIENZOS Y OPORTUNIDADES UNICAS.',
-  '2': 'EL 2 SIMBOLIZA LA DUALIDAD, EL EQUILIBRIO Y LAS DECISIONES. HABLA DE ASOCIACIONES Y DE ELEGIR.',
-  '3': 'EL 3 ES CREACION, CRECIMIENTO Y COLABORACION. INDICA EXPANSION Y AYUDA DE TERCEROS.',
-  '4': 'EL 4 REPRESENTA ESTABILIDAD, ESTRUCTURA Y FUNDAMENTOS. PUEDE INDICAR PAUSA O RIGIDEZ.',
-  '5': 'EL 5 HABLA DE CONFLICTO, CAMBIO E INESTABILIDAD. DESAFIOS QUE INVITAN A LA TRANSFORMACION.',
-  '6': 'EL 6 SIMBOLIZA ARMONIA, EQUILIBRIO Y COMUNICACION. RECONCILIACION Y BUENAS NOTICIAS.',
-  '7': 'EL 7 ES INTROSPECCION, ESPIRITUALIDAD Y MISTERIO. INVITA A LA REFLEXION INTERIOR.',
-  '8': 'EL 8 REPRESENTA PODER, MOVIMIENTO Y LOGROS. ACCION, ORGANIZACION Y EXITO MATERIAL.',
-  '9': 'EL 9 ES PLENITUD, SABIDURIA Y CULMINACION. REALIZACION PERSONAL Y FIN DE CICLO.',
-  '10': 'EL 10 SIMBOLIZA EL FIN DE UN CICLO Y EL RENACIMIENTO. CULMINACION Y NUEVOS INICIOS.',
-  J:   'LA JOTA (PAJE) REPRESENTA JUVENTUD, MENSAJES Y APRENDIZAJE. CURIOSIDAD Y NUEVOS ESTUDIOS.',
-  Q:   'LA REINA SIMBOLIZA INTUICION, CUIDADO Y SABIDURIA EMOCIONAL. LIDERAR CON EL CORAZON.',
-  K:   'EL REY REPRESENTA AUTORIDAD, DOMINIO Y MADUREZ. CONTROL, RESPONSABILIDAD Y LIDERAZGO.'
+  A:   'INICIO Y POTENCIAL PURO. NUEVOS COMIENZOS Y OPORTUNIDADES UNICAS.',
+  '2': 'DUALIDAD Y EQUILIBRIO. ASOCIACIONES Y DECISIONES IMPORTANTES.',
+  '3': 'CREACION Y CRECIMIENTO. EXPANSION Y AYUDA DE TERCEROS.',
+  '4': 'ESTABILIDAD Y ESTRUCTURA. PAUSA, CONSOLIDACION O RIGIDEZ.',
+  '5': 'CONFLICTO Y CAMBIO. DESAFIOS QUE INVITAN A LA TRANSFORMACION.',
+  '6': 'ARMONIA Y COMUNICACION. RECONCILIACION Y BUENAS NOTICIAS.',
+  '7': 'INTROSPECCION Y MISTERIO. REFLEXION Y ANALISIS INTERIOR.',
+  '8': 'PODER Y LOGROS. ACCION, ORGANIZACION Y EXITO MATERIAL.',
+  '9': 'PLENITUD Y SABIDURIA. REALIZACION Y FIN DE CICLO.',
+  '10': 'FIN DE CICLO Y RENACIMIENTO. CULMINACION Y NUEVOS INICIOS.',
+  J:   'JUVENTUD Y MENSAJES. CURIOSIDAD Y NUEVOS APRENDIZAJES.',
+  Q:   'INTUICION Y CUIDADO. SABIDURIA EMOCIONAL Y LIDERAZGO.',
+  K:   'AUTORIDAD Y MADUREZ. CONTROL, RESPONSABILIDAD Y LIDERAZGO.'
 };
 
 const significadosPalos = {
-  corazones: 'PALO DE CORAZONES - ELEMENTO AGUA: EMOCIONES, AMOR Y RELACIONES.',
-  diamantes: 'PALO DE DIAMANTES - ELEMENTO TIERRA: DINERO, TRABAJO Y SEGURIDAD.',
-  treboles:  'PALO DE TREBOLES - ELEMENTO FUEGO: ENERGIA, CREATIVIDAD Y ACCION.',
-  picas:     'PALO DE PICAS - ELEMENTO AIRE: MENTE, COMUNICACION Y VERDAD.'
+  corazones: 'AGUA: AMOR Y EMOCIONES.',
+  diamantes: 'TIERRA: DINERO Y TRABAJO.',
+  treboles:  'FUEGO: ENERGIA Y ACCION.',
+  picas:     'AIRE: MENTE Y VERDAD.'
 };
 
 
@@ -91,10 +87,6 @@ const significadosPalos = {
 //  REFERENCIAS DOM
 // ================================================================
 const grid        = document.getElementById('cardsGrid');
-const modal       = document.getElementById('modal');
-const modalTitle  = document.getElementById('modalTitle');
-const modalBody   = document.getElementById('modalBody');
-const closeModal  = document.getElementById('closeModal');
 const searchInput = document.getElementById('searchInput');
 
 
@@ -112,44 +104,43 @@ function renderCards() {
       card.dataset.name = `${rank.nombre} de ${suit.nombre}`;
 
       card.innerHTML = `
-        <div class="corner top">
-          <span class="rank ${suit.color}">${rank.key}</span>
-          <span class="suit ${suit.color}">${suit.symbol}</span>
-        </div>
-        <div class="center-suit ${suit.color}">${suit.symbol}</div>
-        <div class="corner bottom">
-          <span class="rank ${suit.color}">${rank.key}</span>
-          <span class="suit ${suit.color}">${suit.symbol}</span>
+        <div class="card-inner">
+
+          <!-- CARA FRONTAL -->
+          <div class="card-face card-front">
+            <div class="corner top">
+              <span class="rank ${suit.color}">${rank.key}</span>
+              <span class="suit ${suit.color}">${suit.symbol}</span>
+            </div>
+            <div class="center-suit ${suit.color}">${suit.symbol}</div>
+            <div class="corner bottom">
+              <span class="rank ${suit.color}">${rank.key}</span>
+              <span class="suit ${suit.color}">${suit.symbol}</span>
+            </div>
+          </div>
+
+          <!-- CARA TRASERA: dorso Bicycle + significado -->
+          <div class="card-face card-back">
+            <div class="back-content">
+              <div class="back-suit ${suit.color}">${suit.symbol}</div>
+              <h3>${rank.nombre.toUpperCase()} DE ${suit.nombre.toUpperCase()}</h3>
+              <p>${significados[rank.key]}</p>
+              <p>${significadosPalos[suit.key]}</p>
+            </div>
+          </div>
+
         </div>
       `;
 
-      card.addEventListener('click', () => openCard(rank, suit));
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        card.classList.toggle('flipped');
+      });
+
       grid.appendChild(card);
     });
   });
 }
-
-
-// ================================================================
-//  MODAL
-// ================================================================
-function openCard(rank, suit) {
-  modalTitle.textContent = `${rank.nombre.toUpperCase()} DE ${suit.nombre.toUpperCase()}`;
-  modalBody.innerHTML = `
-    <p>${significados[rank.key]}</p>
-    <p>${significadosPalos[suit.key]}</p>
-    <p class="keywords">&gt; PALABRAS CLAVE: ${rank.nombre.toUpperCase()}, ${suit.nombre.toUpperCase()}</p>
-  `;
-  modal.classList.add('active');
-}
-
-closeModal.addEventListener('click', () => modal.classList.remove('active'));
-modal.addEventListener('click', (e) => {
-  if (e.target === modal) modal.classList.remove('active');
-});
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') modal.classList.remove('active');
-});
 
 
 // ================================================================
