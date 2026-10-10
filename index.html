@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarot Poker - Significado de las Cartas</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Video de fondo -->
+  <div class="video-bg">
+    <video autoplay muted loop playsinline>
+      <source src="https://pixabay.com/es/videos/download/video-61767_medium.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <header>
+    <h1>🃏 Tarot Poker 🃏</h1>
+    <p>Descubre el significado espiritual de cada carta</p>
+  </header>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Buscar carta... (ej: As de Copas, Rey, 7)">
+  </div>
+
+  <div class="cards-grid" id="cardsGrid"></div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <button class="close-btn" id="closeModal">&times;</button>
+      <h2 id="modalTitle"></h2>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
