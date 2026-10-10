@@ -3,25 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tarot Poker - Significado de las Cartas</title>
+  <title>Tarot Poker 8-BIT</title>
+
+  <!-- Fuente pixelada -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- Video de fondo -->
+  <!-- Video de fondo (pixelado con canvas) -->
   <div class="video-bg">
-    <video autoplay muted loop playsinline>
+    <video id="bgVideo" autoplay muted loop playsinline crossorigin="anonymous">
       <source src="https://pixabay.com/es/videos/download/video-61767_medium.mp4" type="video/mp4">
     </video>
+    <canvas id="pixelCanvas"></canvas>
   </div>
 
+  <!-- Scanlines retro -->
+  <div class="scanlines"></div>
+
   <header>
-    <h1>🃏 Tarot Poker 🃏</h1>
-    <p>Descubre el significado espiritual de cada carta</p>
+    <h1>★ TAROT POKER ★</h1>
+    <p>&gt; SIGNIFICADO DE LAS CARTAS &lt;</p>
   </header>
 
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Buscar carta... (ej: As de Copas, Rey, 7)">
+    <span class="prompt">&gt;</span>
+    <input type="text" id="searchInput" placeholder="BUSCAR CARTA...">
   </div>
 
   <div class="cards-grid" id="cardsGrid"></div>
@@ -29,7 +40,7 @@
   <!-- Modal -->
   <div class="modal" id="modal">
     <div class="modal-content">
-      <button class="close-btn" id="closeModal">&times;</button>
+      <button class="close-btn" id="closeModal">X</button>
       <h2 id="modalTitle"></h2>
       <div id="modalBody"></div>
     </div>
